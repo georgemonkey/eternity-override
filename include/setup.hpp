@@ -27,8 +27,8 @@ inline lemlib::Drivetrain drivetrain(&left_dt,
 );
 
 // EXAMPLES
-//inline pros::Motor scoringRoller(-15);
-//inline pros::adi::DigitalOut scoringGate('A');
+inline pros::MotorGroup arm({-10,12}, pros::MotorGearset::green); // motor group with 3 motors on ports 1, 2, and 3 with green gearset
+inline pros::adi::DigitalOut scoringGate('A');
 
 
 //configure tracking wheels

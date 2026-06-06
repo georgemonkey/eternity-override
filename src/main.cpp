@@ -37,6 +37,7 @@ void initialize() {
     chassis.calibrate();
     left_dt.set_brake_mode(pros::MotorBrake::coast);
     right_dt.set_brake_mode(pros::MotorBrake::coast);
+    arm.set_brake_mode(pros::MotorBrake::hold);
 
     selector.on_select([](std::optional<rd::Selector::routine_t> routine) {
         if (routine == std::nullopt) {
@@ -78,7 +79,7 @@ void opcontrol() {
         }
 
         handleDriveMode(defaultDrive);
-
+        handleArm();
         pros::delay(20);
     }
 }
