@@ -41,16 +41,23 @@ void handleCascadeStage() {
 
     if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R1)) {
         scoringStage+=1;
+        // handle maximums
+        if (scoringStage>3){
+        scoringStage=3;
+        }
     }
 
     else if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R2)) {
         scoringStage-=1;
+        //  handle minimums
+        if (scoringStage<0){
+        scoringStage=0;
+        }
     }
 }
 
 void handleCascadeScoring() {
-
-    if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1)) {
-        score(scoringStage);
-    }
+score(scoringStage);
+pros::delay(400);
+cascade.move_absolute(0, 127);
 }
