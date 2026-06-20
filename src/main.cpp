@@ -6,7 +6,7 @@
 #include "setup.hpp"
 
 // set true for green-screen testing, false for competition selector
-bool tuneMode = false;
+bool tuneMode = true;
 
 bool defaultDrive = true; // true = arcade, false = tank
 int DHoldTime = 0;        // ms button held for drive mode switch
@@ -24,7 +24,7 @@ rd::Selector selector({
     {"dummy", &dummy},
     // add new routes here: {"route name", &yourRouteFunction},
 });
-
+    
 void initialize() {
     selector.focus();
 
@@ -37,7 +37,7 @@ void initialize() {
     chassis.calibrate();
     left_dt.set_brake_mode(pros::MotorBrake::coast);
     right_dt.set_brake_mode(pros::MotorBrake::coast);
-    arm.set_brake_mode(pros::MotorBrake::hold);
+    diddy.set_brake_mode(pros::MotorBrake::hold);
 
     selector.on_select([](std::optional<rd::Selector::routine_t> routine) {
         if (routine == std::nullopt) {
@@ -78,8 +78,53 @@ void opcontrol() {
             DHoldTime = 0;
         }
 
+        pros::lcd::print(2, "Enc: %.2f deg", cascadeEnc.get_position() / 100.0);
         handleDriveMode(defaultDrive);
-        handleArm();
+        handleDiddy();
+        handleCascadeStage();
+        handleCascadeScoring();
+        
         pros::delay(20);
     }
+}
+
+
+
+
+
+
+void score(int intendedStage) {
+    cascade.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+
+    if (intendedStage == 0) {
+        cascade.move_absolute(30, 127);
+        while (!((cascadeEnc.get_position() < 3200) && (cascadeEnc.get_position() > 2800))) { 
+            pros::lcd::print(2, "Enc: %.2f deg", cascadeEnc.get_position() / 100.0);
+            pros::delay(20);
+        }
+    }
+
+    else if (intendedStage == 1) {
+        cascade.move_absolute(50, 127);
+        while (!((cascadeEnc.get_position() < 5200) && (cascadeEnc.get_position() > 4800))) {
+            pros::lcd::print(2, "Enc: %.2f deg", cascadeEnc.get_position() / 100.0);
+            pros::delay(20);
+        }
+    }
+    else if (intendedStage == 2) {
+        cascade.move_absolute(70, 127);
+        while (!((cascadeEnc.get_position() < 7200) && (cascadeEnc.get_position() > 6800))) {
+            pros::lcd::print(2, "Enc: %.2f deg", cascadeEnc.get_position() / 100.0);
+            pros::delay(20);
+        }
+    }
+
+    cascade.move(0);
+
+    cascade.move_absolute(0, 127);
+    while (!((cascadeEnc.get_position() < 200) && (cascadeEnc.get_position() > -200))) {
+        pros::lcd::print(2, "Enc: %.2f deg", cascadeEnc.get_position() / 100.0);
+        pros::delay(20);
+    }
+    cascade.move(0);
 }

@@ -2,6 +2,9 @@
 #include "op_control.hpp"
 #include "setup.hpp"
 
+int scoringStage = 1;
+
+
 void handleDriveMode(bool driveMode) {
     driveMode ? handleArcade() : handleTank();
 }
@@ -20,17 +23,34 @@ void handleTank() {
 
 
 
-void handleArm() {
+void handleDiddy() {
 
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
-        arm.move(-127);
+        diddy.move(-127);
     }
 
     else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
-        arm.move(127);
+        diddy.move(127);
+    }
+    else{
+        diddy.move(0);
+    }
+}
+
+void handleCascadeStage() {
+
+    if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R1)) {
+        scoringStage+=1;
     }
 
-    else {
-        arm.move_voltage(0); 
+    else if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R2)) {
+        scoringStage-=1;
+    }
+}
+
+void handleCascadeScoring() {
+
+    if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1)) {
+        score(scoringStage);
     }
 }

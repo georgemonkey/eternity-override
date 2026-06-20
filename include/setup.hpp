@@ -26,9 +26,6 @@ inline lemlib::Drivetrain drivetrain(&left_dt,
                 2                                     // Chase power
 );
 
-// EXAMPLES
-inline pros::MotorGroup arm({-10,12}, pros::MotorGearset::green); // motor group with 3 motors on ports 1, 2, and 3 with green gearset
-inline pros::adi::DigitalOut scoringGate('A');
 
 
 //configure tracking wheels
@@ -89,3 +86,12 @@ inline lemlib::Chassis chassis(drivetrain, // drivetrain settings
                         &throttle_curve,
                         &steer_curve
 );
+
+
+
+
+inline pros::Motor diddy({1}, pros::MotorGearset::green); // motor group with 3 motors on ports 1, 2, and 3 with green gearset
+inline pros::MotorGroup cascade({4, 5}, pros::MotorGearset::green);
+inline pros::Rotation cascadeEnc(12);
+
+inline pros::adi::DigitalOut scoringGate('A');
